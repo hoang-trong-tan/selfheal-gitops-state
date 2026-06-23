@@ -5,3 +5,14 @@ metadata:
   namespace: sample-app
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: order-worker
+  template:
+    metadata:
+      labels:
+        app: order-worker
+    spec:
+      containers:
+      - name: worker
+        image: nginx:alpine
