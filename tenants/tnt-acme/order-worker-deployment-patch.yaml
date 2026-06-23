@@ -20,7 +20,10 @@ spec:
       containers:
         - name: main
           image: python:3.11-slim
-          command: ["python3", "-c"]
+          command: ["python3", "-u", "-c"]
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
           args:
             - |
               import time
