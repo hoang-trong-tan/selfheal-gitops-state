@@ -4,7 +4,7 @@ metadata:
   name: worker
   namespace: sample-app
   annotations:
-    selfheal.io/correlation-id: "67f8553f-ada9-4120-b4dd-bdbaf975e49c"
+    selfheal.io/correlation-id: "16766385-39db-4382-a5d9-3a671a758aab"
     selfheal.io/last-action: "scale_deployment"
     selfheal.io/triggered-by: "argo_workflow"
 spec:
