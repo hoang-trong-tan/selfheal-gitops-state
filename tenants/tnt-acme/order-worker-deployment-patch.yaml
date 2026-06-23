@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: order-worker
   namespace: sample-app
+  labels:
+    app: order-worker
+    selfheal.io/pattern: queue_backlog
 spec:
   replicas: 1
   selector:
@@ -12,7 +15,23 @@ spec:
     metadata:
       labels:
         app: order-worker
+        selfheal.io/pattern: queue_backlog
     spec:
       containers:
-      - name: worker
-        image: nginx:alpine
+        - name: main
+          image: python:3.11-slim
+          command: ["python3", "-c"]
+          args:
+            - |
+              import time
+              print("Order worker running, xử lý queue giả lập")
+              while True:
+                  print("Processing 1 message...")
+                  time.sleep(3)
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
