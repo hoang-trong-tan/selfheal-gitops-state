@@ -1,11 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: worker
+  name: order-worker
   namespace: sample-app
-  annotations:
-    selfheal.io/correlation-id: "405d82fd-5a84-460c-b014-42231d716a72"
-    selfheal.io/last-action: "scale_deployment"
-    selfheal.io/triggered-by: "argo_workflow"
+  labels:
+    app: order-worker
+    selfheal.io/pattern: queue_backlog
 spec:
-  replicas: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-worker
+  template:
+    metadata:
+      labels:
+        app: order-worker
+        selfheal.io/pattern: queue_backlog
+    spec:
+      containers:
+        - name: main
+          image: python:3.11-slim
+          command: ["python3", "-u", "-c"]
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          args:
+            - |
+              import time
+              print("Order worker running, xử lý queue giả lập")
+              while True:
+                  print("Processing 1 message...")
+                  time.sleep(3)
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
